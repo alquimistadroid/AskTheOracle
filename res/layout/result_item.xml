@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:myapp="http://schemas.android.com/apk/res/com.alquimista.android.asktheoracle"
+  android:layout_width="fill_parent" android:layout_height="wrap_content"
+  android:orientation="vertical" android:background="@drawable/result_item_bg">
+  <LinearLayout
+  	android:layout_width="fill_parent" android:layout_height="wrap_content"
+  	android:orientation="horizontal" android:background="@drawable/result_item_header_bg"
+  	android:padding="10dp" >
+
+  	<ImageView android:id="@+id/img_collapsed"
+  		android:layout_width="18sp" android:layout_height="18sp"
+  		android:layout_alignParentLeft="true" android:layout_alignParentTop="true"/>
+
+  	<TextView android:id="@+id/text_title"
+  		android:layout_width="wrap_content" android:layout_height="wrap_content"
+  		android:layout_weight="1" android:gravity="center"
+  		android:layout_centerHorizontal="true" android:layout_alignParentTop="true"/>
+
+  	<ProgressBar android:id="@+id/progress_loading"
+  		android:layout_width="18sp" android:layout_height="18sp"
+  		android:visibility="invisible"/>
+  </LinearLayout>
+  <LinearLayout android:id="@+id/body"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+  	android:orientation="vertical"
+	android:paddingBottom="10dp" android:paddingLeft="10dp"
+  	android:paddingRight="10dp"
+  	android:visibility="gone"/>
+</LinearLayout>

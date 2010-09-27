@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-</LinearLayout>
+    <LinearLayout android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content">
+    	<!-- Google Translate view -->
+	    <LinearLayout android:orientation="vertical"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content">
+	    	<LinearLayout android:id="@+id/google_translate_headerview"
+	    		android:orientation="horizontal"
+	    		android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content">
+	    		<ProgressBar android:id="@+id/google_translate_progress"
+            		android:layout_width="18dip"
+            		android:layout_height="18dip"/>
+	    		<TextView android:layout_width="fill_parent"
+	    			android:layout_height="wrap_content"
+	    			android:gravity="center"
+	    			android:text="Google Translate"/>
+	    	</LinearLayout>
+			<WebView
+		        android:id="@+id/google_translate_webview"
+		        android:layout_width="fill_parent"
+		        android:layout_height="0dip"
+		        android:layout_weight="1" />
+	    </LinearLayout>
+
+	    <!-- Wikipedia view -->
+	    <LinearLayout android:orientation="vertical"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content">
+	    	<LinearLayout android:id="@+id/wikipedia_headerview"
+	    		android:orientation="horizontal"
+	    		android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content">
+	    		<ProgressBar android:id="@+id/wikipedia_progress"
+            		android:layout_width="18dip"
+            		android:layout_height="18dip"/>
+	    		<TextView android:layout_width="fill_parent"
+	    			android:layout_height="wrap_content"
+	    			android:gravity="center"
+	    			android:text="Wikipedia"/>
+	    	</LinearLayout>
+		    <WebView
+		        android:id="@+id/wikipedia_webview"
+		        android:layout_width="fill_parent"
+		        android:layout_height="0dip"
+		        android:layout_weight="1" />
+	    </LinearLayout>
+	</LinearLayout>
+</ScrollView>

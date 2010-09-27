@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- source -->
+	<PreferenceCategory android:title="@string/source">
+		<PreferenceScreen
+				android:key="source" android:title="@string/manage_source"
+				android:summary="@string/manage_source_summary">
+
+			<!-- Google Translate Settings -->
+			<PreferenceScreen
+					android:key="google_translate" android:title="@string/google_translate_title">
+				<CheckBoxPreference
+						android:key="google_translate_enable" android:title="@string/google_translate_title"/>
+
+			</PreferenceScreen>
+
+			<!-- Wikipedia Settings -->
+			<PreferenceScreen
+					android:key="wikipedia" android:title="@string/wikipedia_title">
+				<CheckBoxPreference
+						android:key="wikipedia_enable" android:title="@string/wikipedia_title"/>
+			</PreferenceScreen>
+
+		</PreferenceScreen>
+	</PreferenceCategory>
+
+	<!-- input -->
+	<PreferenceCategory android:title="@string/input">
+		<ListPreference
+                android:key="input_language"
+                android:title="@string/input_language"
+                android:summary="@string/input_language_summary"
+                android:entries="@array/language_list"
+                android:entryValues="@array/language_list_values"
+                android:dialogTitle="@string/input_language_dialog_title" />
+	</PreferenceCategory>
+</PreferenceScreen>
