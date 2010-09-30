@@ -2,6 +2,7 @@ package com.alquimista.android.asktheoracle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,44 +13,63 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.admob.android.ads.AdManager;
 
 
-public class Main extends Activity {
-	private final static String TAG ="AskTheOracle.Main";
-	private final static boolean DEBUG = true;
+public class MainActivity extends Activity {
+	public final static String TAG ="AskTheOracle.MainActivity";
+	public final static boolean DEBUG = true;
 
-	private ResultItemView mGoogleTranslate;
-	private ResultItemView mWikipedia;
+	private final static int INTERNAL_REQUEST_CODE = 0;
+	private final static int GLOBAL_REQUEST_CODE = 1;
 
 	private RelativeLayout mInstructionView;
+	private ListView mSearchListView;
 
-	private static boolean mIsShowResult = false;
+	private static boolean mIsShowInstruction = true;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+
         setContentView(R.layout.main);
 
-        mGoogleTranslate = (ResultItemView) findViewById(R.id.google_translate_result);
-        mWikipedia = (ResultItemView) findViewById(R.id.wikipedia_result);
-
         mInstructionView = (RelativeLayout) findViewById(R.id.instruction);
+        mSearchListView = (ListView) findViewById(R.id.search_list);
+
 
         AdManager.setTestDevices( new String[] {
         	     AdManager.TEST_EMULATOR,             // Android emulator
         	} );
+
+        handleIntent(intent);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if ( ( KeyEvent.KEYCODE_BACK == keyCode ) && mIsShowResult )
+
+    	if ( DEBUG ) Log.d(TAG, "keycode = "+ keyCode +", mIsShowInstruction:"+mIsShowInstruction );
+
+    	if ( ( KeyEvent.KEYCODE_BACK == keyCode ) && !mIsShowInstruction )
     	{
-    		preprareResultLayout(false);
+    		showInstructionView(true);
+    		return false;
+    	}
+    	else if ( KeyEvent.KEYCODE_DPAD_CENTER == keyCode )
+    	{
+    		showInstructionView(false);
+    		//showResultActivity();
+    		//startActivityForResult(intent, 1);
+
+
+    		//preprareResultLayout(false);
     		return false;
     	}
 
@@ -60,30 +80,8 @@ public class Main extends Activity {
     public boolean onSearchRequested() {
     	if ( DEBUG ) Log.d(TAG, "onSearchRequested");
 
-    	// TODO Auto-generated method stub
-    	super.onSearchRequested();
 
-    	/*
-    	mInstructionView.setVisibility(View.GONE);
-
-    	TextView tv = new TextView(this);
-    	tv.setText("this a text view created by onSearchRequested");
-
-    	mGoogleTranslate.setContent(tv);
-    	mGoogleTranslate.showLoading(true);
-    	mGoogleTranslate.setVisibility(View.VISIBLE);
-
-    	mWikipedia.showLoading(true);
-    	mWikipedia.setVisibility(View.VISIBLE);
-    	 */
-    	preprareResultLayout( true );
-
-    	TextView tv = new TextView(this);
-    	tv.setText("this a text view created by onSearchRequested");
-
-    	mGoogleTranslate.setContent(tv);
-
-    	return true;
+    	return super.onSearchRequested();
     }
 
     @Override
@@ -97,19 +95,18 @@ public class Main extends Activity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
     	switch (item.getItemId()) {
+	    	case R.id.search :
+	    		onSearchRequested();
+	    		return true;
 
-    	case R.id.search :
-    		onSearchRequested();
-    		return true;
+	    	case R.id.settings:
+	    		Intent intent = new Intent().setClass(this, SettingsPreference.class);
+	    		startActivity(intent);
+	    		return true;
 
-    	case R.id.settings:
-    		Intent intent = new Intent().setClass(this, Settings.class);
-    		startActivity(intent);
-    		return true;
-
-    	case R.id.about:
-			showAbout();
-			return true;
+	    	case R.id.about:
+				showAbout();
+				return true;
 		}
 
     	return false;
@@ -146,26 +143,44 @@ public class Main extends Activity {
         builder.show();
     }
 
-    private void preprareResultLayout(boolean showResult)
-    {
-
-    	if ( showResult )
-    	{
-    		// show result search
-    		mInstructionView.setVisibility(View.GONE);
-
-    		//TODO: temporary
-    		mGoogleTranslate.setVisibility(View.VISIBLE);
-    		mWikipedia.setVisibility(View.VISIBLE);
-    	}
-    	else
-    	{
-    		// show instruction
-    		mGoogleTranslate.setVisibility(View.GONE);
-    		mWikipedia.setVisibility(View.GONE);
-    		mInstructionView.setVisibility(View.VISIBLE);
-    	}
-
-    	mIsShowResult = showResult;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
     }
+
+    private void handleIntent(Intent intent) {
+    	if ( Intent.ACTION_SEARCH.equals( intent.getAction() ) )
+        {
+        	String query = intent.getStringExtra( SearchManager.QUERY );
+
+        	if ( DEBUG ) Log.d(TAG, "Intent.ACTION_SEARCH, query:" + query );
+
+        	showInstructionView(false);
+
+        	//TODO: do(query)
+        }
+        else if( Intent.ACTION_VIEW.equals( intent.getAction() ) )
+        {
+        	if ( DEBUG ) Log.d(TAG, "Intent.ACTION_VIEW" );
+        }
+    }
+
+    private void showResultActivity()
+    {
+		Intent intent = new Intent(this, ResultActivity.class);
+		startActivity(intent);
+    }
+
+    private void showInstructionView( boolean showInstruction )
+    {
+    	if ( showInstruction != mIsShowInstruction )
+    	{
+    		if ( DEBUG ) Log.d(TAG, showInstruction ? "SHOW" : "GONE" );
+    		mInstructionView.setVisibility( showInstruction ? View.VISIBLE : View.GONE );
+    		mSearchListView.setVisibility( showInstruction ? View.GONE : View.VISIBLE );
+    		mIsShowInstruction = showInstruction;
+    	}
+    }
+
 }

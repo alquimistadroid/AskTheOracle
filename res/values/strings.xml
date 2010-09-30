@@ -7,9 +7,12 @@
     <string name="google_translate_title">Google Translate</string>
     <string name="wikipedia_title">Wikipedia</string>
 
-
+	<!-- instruction page -->
 	<string name="search_instructions_1">Press the search key </string>
 	<string name="search_instructions_2">to start asking the Oracle</string>
+
+	<!-- searchable configuration -->
+	<string name="searchable_hint">Go ahead ask Oracle</string>
 
 	<string name="search">Search</string>
 

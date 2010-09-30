@@ -1,38 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:resultitem="http://schemas.android.com/apk/res/com.alquimista.android.asktheoracle"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:myapp="http://schemas.android.com/apk/res/com.alquimista.android.asktheoracle"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout android:orientation="vertical"
-    	android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"
-    	>
-
-    	<!-- Google Translate view -->
-	    <com.alquimista.android.asktheoracle.ResultItemView android:id="@+id/google_translate_result"
-	    	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	    	android:visibility="gone"
-	    	resultitem:title="@string/google_translate_title"
-	    	resultitem:title_bg="@drawable/google_translate"/>
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
 		<com.admob.android.ads.AdView android:id="@+id/ad"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			myapp:backgroundColor="#000000" myapp:primaryTextColor="#FFFFFF"
 			myapp:secondaryTextColor="#CCCCCC" />
 
-		<!-- Wikipedia view -->
-	    <com.alquimista.android.asktheoracle.ResultItemView android:id="@+id/wikipedia_result"
-	    	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	    	android:visibility="gone"
-	    	resultitem:title="@string/wikipedia_title"
-	    	resultitem:title_bg="@drawable/wikipedia"/>
-
-		<!-- Startup view, no result yet -->
+		<!-- Instruction view -->
 		<RelativeLayout android:id="@+id/instruction"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:padding="15dp">
+			android:padding="15dp" android:layout_weight="1">
     		<TextView android:id="@+id/instruction_1"
     			android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/search_instructions_1"
@@ -53,5 +33,10 @@
 				android:textAppearance="@android:style/TextAppearance.Large"
 				android:layout_alignLeft="@id/instruction_1" android:layout_below="@id/instruction_1"/>
 		</RelativeLayout>
-	</LinearLayout>
-</ScrollView>
+
+		<ListView
+            android:id="@+id/search_list"
+            android:layout_width="fill_parent" android:layout_height="0dip"
+            android:layout_weight="1"
+            android:background="#20FF8070"/>
+</LinearLayout>
