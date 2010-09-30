@@ -6,33 +6,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.admob.android.ads.AdManager;
 
 
 public class Main extends Activity {
-	private final String TAG ="AskTheOracle.Main";
+	private final static String TAG ="AskTheOracle.Main";
+	private final static boolean DEBUG = true;
 
 	private ResultItemView mGoogleTranslate;
 	private ResultItemView mWikipedia;
 
-	private TextView mTextView;
+	private RelativeLayout mInstructionView;
+
+	private static boolean mIsShowResult = false;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result);
+        setContentView(R.layout.main);
 
         mGoogleTranslate = (ResultItemView) findViewById(R.id.google_translate_result);
         mWikipedia = (ResultItemView) findViewById(R.id.wikipedia_result);
 
-        mTextView = (TextView) findViewById(R.id.textview);
+        mInstructionView = (RelativeLayout) findViewById(R.id.instruction);
 
         AdManager.setTestDevices( new String[] {
         	     AdManager.TEST_EMULATOR,             // Android emulator
@@ -40,13 +46,25 @@ public class Main extends Activity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if ( ( KeyEvent.KEYCODE_BACK == keyCode ) && mIsShowResult )
+    	{
+    		preprareResultLayout(false);
+    		return false;
+    	}
+
+    	return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onSearchRequested() {
-    	Log.d(TAG, "onSearchRequested");
+    	if ( DEBUG ) Log.d(TAG, "onSearchRequested");
 
     	// TODO Auto-generated method stub
     	super.onSearchRequested();
 
-    	mTextView.setVisibility(View.GONE);
+    	/*
+    	mInstructionView.setVisibility(View.GONE);
 
     	TextView tv = new TextView(this);
     	tv.setText("this a text view created by onSearchRequested");
@@ -57,6 +75,13 @@ public class Main extends Activity {
 
     	mWikipedia.showLoading(true);
     	mWikipedia.setVisibility(View.VISIBLE);
+    	 */
+    	preprareResultLayout( true );
+
+    	TextView tv = new TextView(this);
+    	tv.setText("this a text view created by onSearchRequested");
+
+    	mGoogleTranslate.setContent(tv);
 
     	return true;
     }
@@ -72,6 +97,10 @@ public class Main extends Activity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
     	switch (item.getItemId()) {
+
+    	case R.id.search :
+    		onSearchRequested();
+    		return true;
 
     	case R.id.settings:
     		Intent intent = new Intent().setClass(this, Settings.class);
@@ -115,5 +144,28 @@ public class Main extends Activity {
 
         builder.create();
         builder.show();
+    }
+
+    private void preprareResultLayout(boolean showResult)
+    {
+
+    	if ( showResult )
+    	{
+    		// show result search
+    		mInstructionView.setVisibility(View.GONE);
+
+    		//TODO: temporary
+    		mGoogleTranslate.setVisibility(View.VISIBLE);
+    		mWikipedia.setVisibility(View.VISIBLE);
+    	}
+    	else
+    	{
+    		// show instruction
+    		mGoogleTranslate.setVisibility(View.GONE);
+    		mWikipedia.setVisibility(View.GONE);
+    		mInstructionView.setVisibility(View.VISIBLE);
+    	}
+
+    	mIsShowResult = showResult;
     }
 }

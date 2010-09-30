@@ -32,6 +32,6 @@
                 android:summary="@string/input_language_summary"
                 android:entries="@array/language_list"
                 android:entryValues="@array/language_list_values"
-                android:dialogTitle="@string/input_language_dialog_title" />
+                android:dialogTitle="@string/input_language_dialog_title"/>
 	</PreferenceCategory>
 </PreferenceScreen>

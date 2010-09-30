@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Main!</string>
+	<!-- app -->
     <string name="app_name">Ask The Oracle</string>
     <string name="app_descrip">Ask The Oracle</string>
 
@@ -8,6 +8,10 @@
     <string name="wikipedia_title">Wikipedia</string>
 
 
+	<string name="search_instructions_1">Press the search key </string>
+	<string name="search_instructions_2">to start asking the Oracle</string>
+
+	<string name="search">Search</string>
 
     <!-- settings -->
     <string name="settings">Settings</string>
@@ -22,6 +26,10 @@
 	<string name="input_language_dialog_title">Choose language</string>
 
 	<!-- google translate settings -->
+
+	<!-- wikipedia settings -->
+
+	<!-- wiktionary settings -->
 
 	<!-- about -->
     <string name="about">About</string>

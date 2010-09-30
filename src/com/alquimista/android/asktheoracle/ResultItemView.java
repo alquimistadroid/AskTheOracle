@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,12 +21,13 @@ public class ResultItemView extends RelativeLayout {
 	private final boolean DEFAULT_SETTING_SHOWLOADING = false;
 
 	private ImageView mCollapsed;
-	private TextView mTitle;
+	private ImageButton mTitle;
+//	private TextView mTitle;
 	private ProgressBar mLoading;
 	private View mContent;
 	private LinearLayout mBody;
 
-	private String mTitleStr;
+//	private String mTitleStr;
 	private boolean mIsCollapsed = DEFAULT_SETTING_COLLAPSED;
 	private boolean mIsShowLoading = DEFAULT_SETTING_SHOWLOADING;
 
@@ -56,7 +58,8 @@ public class ResultItemView extends RelativeLayout {
 		inflater.inflate(R.layout.result_item, this, true);
 
 		mCollapsed = (ImageView) findViewById(R.id.img_collapsed);
-		mTitle = (TextView) findViewById(R.id.text_title);
+//		mTitle = (TextView) findViewById(R.id.text_title);
+		mTitle = (ImageButton) findViewById(R.id.btn_title);
 		mLoading = (ProgressBar) findViewById(R.id.progress_loading);
 		mBody = (LinearLayout) findViewById(R.id.body);
 
@@ -64,7 +67,11 @@ public class ResultItemView extends RelativeLayout {
 		mTitle.setOnClickListener(collapsedListener);
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResultView, defStyle, 0);
-		mTitleStr = a.getString(R.styleable.ResultView_title);
+//		mTitleStr = a.getString(R.styleable.ResultView_title);
+
+		Drawable d = a.getDrawable(R.styleable.ResultView_title_bg);
+
+		mTitle.setImageDrawable(d);
 		mIsCollapsed = a.getBoolean(R.styleable.ResultView_collapsed, DEFAULT_SETTING_COLLAPSED);
 
 		a.recycle();
@@ -77,10 +84,10 @@ public class ResultItemView extends RelativeLayout {
 	 */
 	private void initResultItemView()
 	{
-		if( mTitleStr != null )
+		/*if( mTitleStr != null )
 		{
-			mTitle.setText(mTitleStr);
-		}
+			mTitle.setsetText(mTitleStr);
+		}*/
 
 		mCollapsed.setImageResource( mIsCollapsed ? R.drawable.collapsed : R.drawable.expanded );
 

@@ -2,6 +2,7 @@
 <resources>
 	<declare-styleable name="ResultView">
 		<attr name="title" format="reference|string"/>
+		<attr name="title_bg" format="reference"/>
 		<attr name="showLoading" format="boolean"/>
 		<attr name="collapsed" format="boolean"/>
 	</declare-styleable>

@@ -7,16 +7,16 @@
   <LinearLayout
   	android:layout_width="fill_parent" android:layout_height="wrap_content"
   	android:orientation="horizontal" android:background="@drawable/result_item_header_bg"
-  	android:padding="10dp" >
+  	android:padding="5dp" android:paddingTop="10dp">
 
   	<ImageView android:id="@+id/img_collapsed"
-  		android:layout_width="18sp" android:layout_height="18sp"
-  		android:layout_alignParentLeft="true" android:layout_alignParentTop="true"/>
+  		android:layout_width="18sp" android:layout_height="18sp"/>
 
-  	<TextView android:id="@+id/text_title"
+  	<ImageButton android:id="@+id/btn_title"
   		android:layout_width="wrap_content" android:layout_height="wrap_content"
   		android:layout_weight="1" android:gravity="center"
-  		android:layout_centerHorizontal="true" android:layout_alignParentTop="true"/>
+  		android:background="@null"
+  		android:maxHeight="10sp"/>
 
   	<ProgressBar android:id="@+id/progress_loading"
   		android:layout_width="18sp" android:layout_height="18sp"
@@ -25,7 +25,7 @@
   <LinearLayout android:id="@+id/body"
     android:layout_width="fill_parent" android:layout_height="wrap_content"
   	android:orientation="vertical"
-	android:paddingBottom="10dp" android:paddingLeft="10dp"
-  	android:paddingRight="10dp"
+	android:paddingBottom="5dp" android:paddingLeft="5dp"
+  	android:paddingRight="5dp"
   	android:visibility="gone"/>
 </LinearLayout>
