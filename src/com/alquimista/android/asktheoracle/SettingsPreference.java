@@ -5,10 +5,23 @@ import java.util.Locale;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.widget.Toast;
+import android.provider.SearchRecentSuggestions;
 
 public class SettingsPreference extends PreferenceActivity {
+
+	public final static String GT_ENABLE = "gt_enable";
+	public final static String WIKTIONARY_ENABLE = "wiktionary_enable";
+	public final static String WIKIPEDIA_ENABLE = "wikipedia_enable";
+
+
+	public final static String INPUT_LANGUAGE = "input_language";
+	public final static String PRIVACY_CLEAR_HISTORY = "privacy_clear_history";
+
+	public final static String DEFAULT_VALUE_INPUT_LANGUAGE = "en";
+	public final static boolean DEFAULT_VALUE_ENABLE_SOURCE = true;
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,12 +31,11 @@ public class SettingsPreference extends PreferenceActivity {
 
         // by default if user never select input language,
         // it will choose hh language
-        ListPreference lp = (ListPreference) findPreference("input_language");
+        ListPreference lp = (ListPreference) findPreference(INPUT_LANGUAGE);
         if ( lp.getValue() == null )
         {
         	lp.setValue(getDefaultLanguage());
         }
-
 	}
 
 	/**
@@ -40,7 +52,7 @@ public class SettingsPreference extends PreferenceActivity {
 				return str;
 			}
 		}
-		return "en";
+		return DEFAULT_VALUE_INPUT_LANGUAGE;
 	}
 
 }

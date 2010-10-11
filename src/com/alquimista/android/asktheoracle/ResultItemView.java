@@ -2,26 +2,23 @@ package com.alquimista.android.asktheoracle;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class ResultItemView extends RelativeLayout {
 
 	private final boolean DEFAULT_SETTING_COLLAPSED = false;
 	private final boolean DEFAULT_SETTING_SHOWLOADING = false;
 
+	private LinearLayout mHeader;
 	private ImageView mCollapsed;
-	private ImageButton mTitle;
+	private ImageView mTitle;
 //	private TextView mTitle;
 	private ProgressBar mLoading;
 	private View mContent;
@@ -33,6 +30,7 @@ public class ResultItemView extends RelativeLayout {
 
 	private View.OnClickListener collapsedListener = new View.OnClickListener() {
 		public void onClick(View v) {
+//			Log.d("ResultItemView","OnClickListener");
 			toggleCollapsed();
 
 		}
@@ -57,14 +55,14 @@ public class ResultItemView extends RelativeLayout {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.result_item, this, true);
 
+		mHeader = (LinearLayout) findViewById(R.id.header);
 		mCollapsed = (ImageView) findViewById(R.id.img_collapsed);
 //		mTitle = (TextView) findViewById(R.id.text_title);
-		mTitle = (ImageButton) findViewById(R.id.btn_title);
+		mTitle = (ImageView) findViewById(R.id.img_title);
 		mLoading = (ProgressBar) findViewById(R.id.progress_loading);
 		mBody = (LinearLayout) findViewById(R.id.body);
 
-		mCollapsed.setOnClickListener(collapsedListener);
-		mTitle.setOnClickListener(collapsedListener);
+		mHeader.setOnClickListener(collapsedListener);
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResultView, defStyle, 0);
 //		mTitleStr = a.getString(R.styleable.ResultView_title);
@@ -72,6 +70,7 @@ public class ResultItemView extends RelativeLayout {
 		Drawable d = a.getDrawable(R.styleable.ResultView_title_bg);
 
 		mTitle.setImageDrawable(d);
+
 		mIsCollapsed = a.getBoolean(R.styleable.ResultView_collapsed, DEFAULT_SETTING_COLLAPSED);
 
 		a.recycle();

@@ -7,19 +7,33 @@
 				android:summary="@string/manage_source_summary">
 
 			<!-- Google Translate Settings -->
-			<PreferenceScreen
-					android:key="google_translate" android:title="@string/google_translate_title">
+			<PreferenceCategory android:title="@string/gt_setting">
 				<CheckBoxPreference
-						android:key="google_translate_enable" android:title="@string/google_translate_title"/>
+					android:key="gt_enable" android:title="@string/gt_title"
+					android:summary="@string/gt_enable_summary"/>
+				<ListPreference
+                	android:key="gt_output_language"
+                	android:dependency="gt_enable"
+                	android:title="@string/gt_translate_to"
+                	android:summary="@string/gt_translate_to_summary"
+                	android:entries="@array/language_list"
+                	android:entryValues="@array/language_list_values"
+                	android:dialogTitle="@string/choose_language_dialog_title"/>
+			</PreferenceCategory>
 
-			</PreferenceScreen>
+			<!-- Wiktionary Settings -->
+			<PreferenceCategory android:title="@string/wiktionary_setting">
+				<CheckBoxPreference
+					android:key="wiktionary_enable" android:title="@string/wiktionary_title"
+					android:summary="@string/wiktionary_enable_summary"/>
+			</PreferenceCategory>
 
 			<!-- Wikipedia Settings -->
-			<PreferenceScreen
-					android:key="wikipedia" android:title="@string/wikipedia_title">
+			<PreferenceCategory android:title="@string/wikipedia_setting">
 				<CheckBoxPreference
-						android:key="wikipedia_enable" android:title="@string/wikipedia_title"/>
-			</PreferenceScreen>
+					android:key="wikipedia_enable" android:title="@string/wikipedia_title"
+					android:summary="@string/wikipedia_enable_summary"/>
+			</PreferenceCategory>
 
 		</PreferenceScreen>
 	</PreferenceCategory>
@@ -32,6 +46,16 @@
                 android:summary="@string/input_language_summary"
                 android:entries="@array/language_list"
                 android:entryValues="@array/language_list_values"
-                android:dialogTitle="@string/input_language_dialog_title"/>
+                android:dialogTitle="@string/choose_language_dialog_title"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/privacy_setting">
+		<com.alquimista.android.asktheoracle.SimpleDialogPreference
+				android:key="privacy_clear_history"
+                android:title="@string/pref_privacy_clear_history"
+                android:summary="@string/pref_privacy_clear_history_summary"
+                android:dialogMessage="@string/pref_privacy_clear_history_dlg"
+                android:dialogTitle="@string/clear"
+                android:dialogIcon="@android:drawable/ic_dialog_alert"/>
 	</PreferenceCategory>
 </PreferenceScreen>

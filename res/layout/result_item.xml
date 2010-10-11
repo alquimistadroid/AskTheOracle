@@ -7,15 +7,15 @@
   <LinearLayout
   	android:layout_width="fill_parent" android:layout_height="wrap_content"
   	android:orientation="horizontal" android:background="@drawable/result_item_header_bg"
-  	android:padding="5dp" android:paddingTop="10dp">
+  	android:padding="5dp" android:paddingTop="10dp"
+  	android:id="@+id/header">
 
   	<ImageView android:id="@+id/img_collapsed"
   		android:layout_width="18sp" android:layout_height="18sp"/>
 
-  	<ImageButton android:id="@+id/btn_title"
+  	<ImageView android:id="@+id/img_title"
   		android:layout_width="wrap_content" android:layout_height="wrap_content"
   		android:layout_weight="1" android:gravity="center"
-  		android:background="@null"
   		android:maxHeight="10sp"/>
 
   	<ProgressBar android:id="@+id/progress_loading"

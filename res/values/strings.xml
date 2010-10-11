@@ -4,8 +4,10 @@
     <string name="app_name">Ask The Oracle</string>
     <string name="app_descrip">Ask The Oracle</string>
 
-    <string name="google_translate_title">Google Translate</string>
+    <string name="gt_title">Google Translate</string>
     <string name="wikipedia_title">Wikipedia</string>
+    <string name="wiktionary_title">Wiktionary</string>
+
 
 	<!-- instruction page -->
 	<string name="search_instructions_1">Press the search key </string>
@@ -13,11 +15,18 @@
 
 	<!-- searchable configuration -->
 	<string name="searchable_hint">Go ahead ask Oracle</string>
+	<string name="loading_please_wait">Loading. Please wait...</string>
+	<string name="search_results">%d entries found for \'%s\': </string>
+	<string name="empty_result">No entries found.</string>
+	<string name="error_result">Connection error or problem reading data.</string>
 
 	<string name="search">Search</string>
+	<string name="clear">Clear</string>
 
     <!-- settings -->
     <string name="settings">Settings</string>
+    <string name="choose_language_dialog_title">Choose language</string>
+
 
 	<string name="source">Source</string>
 	<string name="manage_source">Manage Source</string>
@@ -26,16 +35,39 @@
 	<string name="input">Input</string>
 	<string name="input_language">Input Language</string>
 	<string name="input_language_summary">Change the input language to be asked</string>
-	<string name="input_language_dialog_title">Choose language</string>
 
+
+	<string name="privacy_setting">Privacy settings</string>
+
+
+	<!-- Settings label -->
+    <string name="pref_privacy_clear_history">Clear history</string>
+    <!-- Settings summary -->
+    <string name="pref_privacy_clear_history_summary">Clear the search history</string>
+    <!-- Confirmation dialog message -->
+    <string name="pref_privacy_clear_history_dlg">The search history will be deleted.</string>
+
+    <!-- source settings -->
 	<!-- google translate settings -->
-
-	<!-- wikipedia settings -->
+	<string name="gt_setting">Google Translate Setting</string>
+	<string name="gt_enable_summary">Enable google translate source</string>
+	<string name="gt_translate_to">Translate to</string>
+	<string name="gt_translate_to_summary">Change the language translated to</string>
 
 	<!-- wiktionary settings -->
+	<string name="wiktionary_setting">Wiktionary Setting</string>
+	<string name="wiktionary_enable_summary">Enable Wiktionary source</string>
+
+	<!-- wikipedia settings -->
+	<string name="wikipedia_setting">Wikipedia Setting</string>
+	<string name="wikipedia_enable_summary">Enable Wikipedia source</string>
 
 	<!-- about -->
     <string name="about">About</string>
     <string name="about_credits">About Credits</string>
 	<string name="about_donate">Donate!</string>
+
+	<!-- mediawiki helper -->
+	<string name="template_user_agent">"%s/%s (Linux; Android)"</string>
+
 </resources>
