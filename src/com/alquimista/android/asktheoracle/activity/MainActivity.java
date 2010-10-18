@@ -1,18 +1,14 @@
-package com.alquimista.android.asktheoracle;
+package com.alquimista.android.asktheoracle.activity;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,16 +17,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.admob.android.ads.AdManager;
+import com.alquimista.android.asktheoracle.HttpProgressListener;
+import com.alquimista.android.asktheoracle.R;
+import com.alquimista.android.asktheoracle.datasource.DataFactory;
+import com.alquimista.android.asktheoracle.datasource.SearchRecentProvider;
 
 public class MainActivity extends Activity {
 	public final static String TAG ="AskTheOracle.MainActivity";
@@ -45,17 +44,18 @@ public class MainActivity extends Activity {
 	private ProgressBar mSearchListProgress;
 
 	private static boolean mIsShowInstruction = true;
-	private String mKeyword;
-	private String mLanguage;
 
-	static SearchRecentSuggestions mRecentSuggestions;
+	public static SearchRecentSuggestions mRecentSuggestions;
+
+	private static SuggestListWorker mWorker = null;
+
+	private ArrayAdapter<String> mAdapter = null;
 
 	OnItemClickListener itemClickListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Cursor c = (Cursor) parent.getAdapter().getItem(position);
-			String s = c.getString(c.getColumnIndex(AskTheOracleProvider.SUGGEST_COLUMNS_INTENT_DATA));
+			String s = (String) parent.getAdapter().getItem(position);
 			showResultActivity(s);
 		}
 
@@ -81,6 +81,11 @@ public class MainActivity extends Activity {
         mRecentSuggestions = new SearchRecentSuggestions(this,
                 SearchRecentProvider.AUTHORITY, SearchRecentProvider.MODE);
 
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        mSearchListView.setAdapter(mAdapter);
+
+        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+
         AdManager.setTestDevices( new String[] {
         	     AdManager.TEST_EMULATOR,             // Android emulator
         	} );
@@ -97,6 +102,7 @@ public class MainActivity extends Activity {
 		case KeyEvent.KEYCODE_BACK:
 	    	if (!mIsShowInstruction )
 	    	{
+	    		cancelWorker();
 	    		showInstructionView(true);
 	    		return false;
 	    	}
@@ -133,7 +139,7 @@ public class MainActivity extends Activity {
 	    		return true;
 
 	    	case R.id.settings:
-	    		Intent intent = new Intent().setClass(this, SettingsPreference.class);
+	    		Intent intent = new Intent().setClass(this, SettingsPreferenceActivity.class);
 	    		startActivity(intent);
 	    		return true;
 
@@ -185,44 +191,10 @@ public class MainActivity extends Activity {
     private void handleIntent(Intent intent) {
     	if ( Intent.ACTION_SEARCH.equals( intent.getAction() ) )
         {
-        	setKeyword(intent.getStringExtra( SearchManager.QUERY ) );
-
-    		ArrayList<String> al = new ArrayList<String>();
-
-    		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-    		setLanguage(sharedPref.getString(SettingsPreference.INPUT_LANGUAGE,
-					SettingsPreference.DEFAULT_VALUE_INPUT_LANGUAGE) );
-
-    		// check wiktionary setting
-    		if( sharedPref.getBoolean(SettingsPreference.WIKTIONARY_ENABLE, SettingsPreference.DEFAULT_VALUE_ENABLE_SOURCE) )
-    		{
-    			al.add( MediaWikiHelper.TYPE_WIKTIONARY );
-    			if ( DEBUG ) Log.d(TAG, "wiktionary enabled");
-    		}
-
-    		// check wikipedia setting
-    		if( sharedPref.getBoolean(SettingsPreference.WIKIPEDIA_ENABLE, SettingsPreference.DEFAULT_VALUE_ENABLE_SOURCE) )
-    		{
-    			al.add( MediaWikiHelper.TYPE_WIKIPEDIA );
-    			if ( DEBUG ) Log.d(TAG, "wikipedia enabled");
-    		}
-
-    		int size = al.size ();
-
-    		if ( size > 0 )
-    		{
-	        	showInstructionView(false);
-	        	refreshSearchList(null);
-
-	    		String params [] = new String [size];
-	    		al.toArray (params);
-	    		if ( DEBUG ) Log.d(TAG, params.toString());
-
-	        	new ResultListWorker().execute(params);
-    		}
-
-
+    		showInstructionView(false);
+    		cancelWorker();
+    		mWorker = new SuggestListWorker();
+    		mWorker.execute(intent.getStringExtra( SearchManager.QUERY ));
         }
         else if( Intent.ACTION_VIEW.equals( intent.getAction() ) )
         {
@@ -234,24 +206,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void refreshSearchList(Cursor c)
+    private void cancelWorker()
     {
-    	if ( c != null )
-    	{
-	    	startManagingCursor(c);
-	    	ListAdapter adapter = new SimpleCursorAdapter(this,
-	                // Use a template that displays a text view
-	                android.R.layout.simple_list_item_1,
-	                // Give the cursor to the list adatper
-	                c,
-	                // Map the NAME column in the people database to...
-	                new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1 } ,
-	                // The "text1" view defined in the XML template
-	                new int[] {android.R.id.text1});
-	        mSearchListView.setAdapter(adapter);
-    	}
-    	else
-    		mSearchListView.setAdapter(null);
+    	if ( mWorker != null )
+		{
+			mWorker.cancel(true);
+			mWorker = null;
+		}
     }
 
     private void showResultActivity(String query)
@@ -275,25 +236,6 @@ public class MainActivity extends Activity {
     	}
     }
 
-    private String getKeyword()
-    {
-    	return mKeyword;
-    }
-
-    private void setKeyword( String keyword )
-    {
-    	mKeyword = keyword;
-    }
-
-    private String getLanguage()
-    {
-    	return mLanguage;
-    }
-
-    private void setLanguage( String language )
-    {
-    	mLanguage = language;
-    }
 
     private void setListTitle(String title)
     {
@@ -305,29 +247,28 @@ public class MainActivity extends Activity {
     	mSearchListProgress.setVisibility(progress? View.VISIBLE : View.INVISIBLE);
     }
 
-    private class ResultListWorker extends AsyncTask<String, Void, Cursor>
+    private class SuggestListWorker extends AsyncTask<String, String, Integer>
+    	implements HttpProgressListener
     {
+    	String mKeyword;
     	@Override
-    	protected Cursor doInBackground(String... params) {
-    		Uri uri;
+    	protected Integer doInBackground(String... params) {
+    		mKeyword = params[0];
+    		try {
+    			new DataFactory(MainActivity.this).getSuggestion(mKeyword, this);
+			} catch (IOException ie) {
+				return -1;
+			}
 
-    		String language = getLanguage();
-
-    		uri = Uri.withAppendedPath(
-					AskTheOracleProvider.CONTENT_URI,
-					SearchManager.SUGGEST_URI_PATH_QUERY);
-			uri = Uri.withAppendedPath(uri, language);
-			uri = Uri.withAppendedPath(uri, getKeyword());
-
-    		return getContentResolver().query(uri, null, null, params, null);
+			return 0;
     	}
 
     	@Override
     	protected void onPreExecute() {
-
     		MainActivity.this.runOnUiThread( new Runnable() {
 				@Override
 				public void run() {
+					mAdapter.clear();
             		setResultProgress(true);
             		setListTitle(getResources().getString(R.string.loading_please_wait));
 				}
@@ -335,30 +276,45 @@ public class MainActivity extends Activity {
     	}
 
     	@Override
-    	protected void onPostExecute(Cursor result) {
-    		final Cursor c = result;
+    	protected void onProgressUpdate(String... values) {
+    		for (String string : values) {
+				mAdapter.add(string);
+			}
+    	}
+
+    	@Override
+    	protected void onPostExecute(Integer errorCode) {
+    		final int count = mAdapter.getCount();
+    		final int error = errorCode.intValue();
 
     		MainActivity.this.runOnUiThread( new Runnable() {
 				@Override
 				public void run() {
 					setResultProgress(false);
-        			if ( c == null )
-            		{
-            			setListTitle( getString(R.string.error_result) );
-            		}
-            		else if ( c.getCount() == 0 )
-            		{
-            			setListTitle( getString(R.string.empty_result) );
-            		}
-            		else
-            		{
-        				refreshSearchList(c);
-            			setListTitle( getString(R.string.search_results, c.getCount(), getKeyword() ) );
-            		}
 
+					if ( count == 0 )
+					{
+						if ( error == -1 )
+						{
+							setListTitle( getString(R.string.error_result) );
+						}
+						else
+						{
+							setListTitle( getString(R.string.empty_result) );
+						}
+					}
+					else
+					{
+						setListTitle( getString(R.string.search_results, count, mKeyword ) );
+					}
 				}
 			});
     	}
+
+		@Override
+		public void onProgressLoading(int requestCode, String result) {
+			publishProgress(result);
+		}
     }
 
 }

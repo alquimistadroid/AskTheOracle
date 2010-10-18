@@ -1,25 +1,17 @@
-package com.alquimista.android.asktheoracle;
+package com.alquimista.android.asktheoracle.activity;
 
 import java.util.Locale;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
-import android.provider.SearchRecentSuggestions;
 
-public class SettingsPreference extends PreferenceActivity {
+import com.alquimista.android.asktheoracle.R;
+import com.alquimista.android.asktheoracle.preference.SettingPreference;
 
-	public final static String GT_ENABLE = "gt_enable";
-	public final static String WIKTIONARY_ENABLE = "wiktionary_enable";
-	public final static String WIKIPEDIA_ENABLE = "wikipedia_enable";
+public class SettingsPreferenceActivity extends PreferenceActivity {
 
-
-	public final static String INPUT_LANGUAGE = "input_language";
-	public final static String PRIVACY_CLEAR_HISTORY = "privacy_clear_history";
-
-	public final static String DEFAULT_VALUE_INPUT_LANGUAGE = "en";
-	public final static boolean DEFAULT_VALUE_ENABLE_SOURCE = true;
-
+	public final static String TAG = "AskTheOracle.SettingsPreferenceActivity";
 
 
 	@Override
@@ -31,7 +23,7 @@ public class SettingsPreference extends PreferenceActivity {
 
         // by default if user never select input language,
         // it will choose hh language
-        ListPreference lp = (ListPreference) findPreference(INPUT_LANGUAGE);
+        ListPreference lp = (ListPreference) findPreference(SettingPreference.GT_OUTPUT_LANGUAGE);
         if ( lp.getValue() == null )
         {
         	lp.setValue(getDefaultLanguage());
@@ -52,7 +44,7 @@ public class SettingsPreference extends PreferenceActivity {
 				return str;
 			}
 		}
-		return DEFAULT_VALUE_INPUT_LANGUAGE;
+		return SettingPreference.DEFAULT_VALUE_GT_OUTPUT_LANGUAGE;
 	}
 
 }

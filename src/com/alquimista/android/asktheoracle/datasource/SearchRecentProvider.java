@@ -1,4 +1,4 @@
-package com.alquimista.android.asktheoracle;
+package com.alquimista.android.asktheoracle.datasource;
 
 import android.content.SearchRecentSuggestionsProvider;
 import android.net.Uri;

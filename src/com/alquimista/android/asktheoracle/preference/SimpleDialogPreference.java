@@ -1,13 +1,15 @@
-package com.alquimista.android.asktheoracle;
+package com.alquimista.android.asktheoracle.preference;
 
 import android.content.Context;
 import android.preference.DialogPreference;
-import android.provider.SearchRecentSuggestions;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.alquimista.android.asktheoracle.activity.MainActivity;
+import com.alquimista.android.asktheoracle.activity.SettingsPreferenceActivity;
+
 public class SimpleDialogPreference extends DialogPreference {
-	private final static String TAG = "SimpleDialogPreference";
+	private final static String TAG = "AskTheOracle.SimpleDialogPreference";
 	private final static boolean DEBUG = true;
 
 	public SimpleDialogPreference(Context context, AttributeSet attrs) {
@@ -25,7 +27,7 @@ public class SimpleDialogPreference extends DialogPreference {
 		if (positiveResult) {
 			if( DEBUG ) Log.d(TAG, "getkey : " + getKey() + ", positive result");
 
-			if( SettingsPreference.PRIVACY_CLEAR_HISTORY.equals( getKey() ) )
+			if( SettingPreference.PRIVACY_CLEAR_HISTORY.equals( getKey() ) )
 			{
 //				SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getContext(),
 //				        SearchRecentProvider.AUTHORITY, SearchRecentProvider.MODE);

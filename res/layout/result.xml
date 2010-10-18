@@ -11,7 +11,7 @@
     	>
 
     	<!-- Google Translate view -->
-	    <com.alquimista.android.asktheoracle.ResultItemView android:id="@+id/google_translate_result"
+	    <com.alquimista.android.asktheoracle.widget.ResultItemView android:id="@+id/google_translate_result"
 	    	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	    	android:visibility="gone"
 	    	resultitem:title="@string/gt_title"
@@ -22,8 +22,15 @@
 			myapp:backgroundColor="#000000" myapp:primaryTextColor="#FFFFFF"
 			myapp:secondaryTextColor="#CCCCCC" />
 
+		<!-- wiktionary view -->
+	    <com.alquimista.android.asktheoracle.widget.ResultItemView android:id="@+id/wiktionary_result"
+	    	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	    	android:visibility="gone"
+	    	resultitem:title="@string/wikipedia_title"
+	    	resultitem:title_bg="@drawable/wikipedia"/>
+
 		<!-- Wikipedia view -->
-	    <com.alquimista.android.asktheoracle.ResultItemView android:id="@+id/wikipedia_result"
+	    <com.alquimista.android.asktheoracle.widget.ResultItemView android:id="@+id/wikipedia_result"
 	    	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	    	android:visibility="gone"
 	    	resultitem:title="@string/wikipedia_title"

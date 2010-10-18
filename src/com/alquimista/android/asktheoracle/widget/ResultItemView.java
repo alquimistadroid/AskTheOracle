@@ -1,4 +1,10 @@
-package com.alquimista.android.asktheoracle;
+package com.alquimista.android.asktheoracle.widget;
+
+import com.alquimista.android.asktheoracle.R;
+import com.alquimista.android.asktheoracle.R.drawable;
+import com.alquimista.android.asktheoracle.R.id;
+import com.alquimista.android.asktheoracle.R.layout;
+import com.alquimista.android.asktheoracle.R.styleable;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 public class ResultItemView extends RelativeLayout {
+
+	public final static String TAG = "AskTheOracle.ResultItemView";
 
 	private final boolean DEFAULT_SETTING_COLLAPSED = false;
 	private final boolean DEFAULT_SETTING_SHOWLOADING = false;
