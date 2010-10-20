@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
 import android.text.TextUtils;
@@ -53,7 +54,19 @@ public class MediaWikiHelper {
 
 		String result = Utils.convertStreamToString(inputStream);
 
-    	return result;
+		try {
+			JSONObject response = new JSONObject(result);
+            JSONObject query2 = response.getJSONObject("query");
+            JSONObject pages = query2.getJSONObject("pages");
+            JSONObject page = pages.getJSONObject((String) pages.keys().next());
+            JSONArray revisions = page.getJSONArray("revisions");
+            JSONObject revision = revisions.getJSONObject(0);
+            return revision.getString("*");
+		}
+		catch ( JSONException je )
+		{
+			throw new RuntimeException(je);
+		}
     }
 
 

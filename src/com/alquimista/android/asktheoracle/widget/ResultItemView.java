@@ -1,21 +1,20 @@
 package com.alquimista.android.asktheoracle.widget;
 
-import com.alquimista.android.asktheoracle.R;
-import com.alquimista.android.asktheoracle.R.drawable;
-import com.alquimista.android.asktheoracle.R.id;
-import com.alquimista.android.asktheoracle.R.layout;
-import com.alquimista.android.asktheoracle.R.styleable;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.alquimista.android.asktheoracle.R;
 
 public class ResultItemView extends RelativeLayout {
 
@@ -27,18 +26,28 @@ public class ResultItemView extends RelativeLayout {
 	private LinearLayout mHeader;
 	private ImageView mCollapsed;
 	private ImageView mTitle;
-//	private TextView mTitle;
 	private ProgressBar mLoading;
-	private View mContent;
+	private WebView mWebView;
+
 	private LinearLayout mBody;
 
-//	private String mTitleStr;
+	private String mStrContent = "";
+
 	private boolean mIsCollapsed = DEFAULT_SETTING_COLLAPSED;
 	private boolean mIsShowLoading = DEFAULT_SETTING_SHOWLOADING;
 
+    /**
+     * Mime-type to use when showing parsed results in a {@link WebView}.
+     */
+    public static final String MIME_TYPE = "text/html";
+
+    /**
+     * Encoding to use when showing parsed results in a {@link WebView}.
+     */
+    public static final String ENCODING = "utf-8";
+
 	private View.OnClickListener collapsedListener = new View.OnClickListener() {
 		public void onClick(View v) {
-//			Log.d("ResultItemView","OnClickListener");
 			toggleCollapsed();
 
 		}
@@ -65,15 +74,15 @@ public class ResultItemView extends RelativeLayout {
 
 		mHeader = (LinearLayout) findViewById(R.id.header);
 		mCollapsed = (ImageView) findViewById(R.id.img_collapsed);
-//		mTitle = (TextView) findViewById(R.id.text_title);
 		mTitle = (ImageView) findViewById(R.id.img_title);
 		mLoading = (ProgressBar) findViewById(R.id.progress_loading);
 		mBody = (LinearLayout) findViewById(R.id.body);
+		mWebView = (WebView) findViewById(R.id.webview);
+		mWebView.setBackgroundColor(0);
 
 		mHeader.setOnClickListener(collapsedListener);
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResultView, defStyle, 0);
-//		mTitleStr = a.getString(R.styleable.ResultView_title);
 
 		Drawable d = a.getDrawable(R.styleable.ResultView_title_bg);
 
@@ -91,14 +100,10 @@ public class ResultItemView extends RelativeLayout {
 	 */
 	private void initResultItemView()
 	{
-		/*if( mTitleStr != null )
-		{
-			mTitle.setsetText(mTitleStr);
-		}*/
-
 		mCollapsed.setImageResource( mIsCollapsed ? R.drawable.collapsed : R.drawable.expanded );
+		mBody.setVisibility(mIsCollapsed ? View.GONE : View.VISIBLE );
 
-		mContent = null;
+		mStrContent = "";
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class ResultItemView extends RelativeLayout {
 	 */
 	private void setCollapsed(boolean collapsed)
 	{
-		if ( ( mIsCollapsed != collapsed ) && mContent != null )
+		if ( ( mIsCollapsed != collapsed ) && ( !TextUtils.isEmpty( mStrContent ) ) )
 		{
 			mIsCollapsed = collapsed;
 
@@ -139,27 +144,21 @@ public class ResultItemView extends RelativeLayout {
 		}
 	}
 
-	/**
-	 *
-	 * @param content
-	 */
-	public void setContent( View content )
+
+	public void setContent( String content )
 	{
-		if ( mContent != content )
+		setContent( content , "" );
+	}
+
+	public void setContent( String content , String style )
+	{
+		String webviewContent = style + content;
+		if ( mStrContent != webviewContent )
 		{
-			if ( mContent != null )
-			{
-				mBody.removeView(mContent);
-			}
-
-			if( content != null )
-			{
-				mBody.addView(content);
-				mBody.setVisibility(View.VISIBLE );
-			}
-
-			mContent = content;
+			mWebView.loadData(webviewContent, MIME_TYPE, ENCODING);
+			mStrContent = webviewContent;
 		}
 	}
+
 
 }

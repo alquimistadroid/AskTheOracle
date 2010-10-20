@@ -54,7 +54,7 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/privacy_setting">
-		<com.alquimista.android.asktheoracle.SimpleDialogPreference
+		<com.alquimista.android.asktheoracle.preference.SimpleDialogPreference
 				android:key="privacy_clear_history"
                 android:title="@string/pref_privacy_clear_history"
                 android:summary="@string/pref_privacy_clear_history_summary"

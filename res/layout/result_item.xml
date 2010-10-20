@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:myapp="http://schemas.android.com/apk/res/com.alquimista.android.asktheoracle"
-  android:layout_width="fill_parent" android:layout_height="wrap_content"
-  android:orientation="vertical" android:background="@drawable/result_item_bg">
-  <LinearLayout
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+  	xmlns:myapp="http://schemas.android.com/apk/res/com.alquimista.android.asktheoracle"
   	android:layout_width="fill_parent" android:layout_height="wrap_content"
-  	android:orientation="horizontal" android:background="@drawable/result_item_header_bg"
-  	android:padding="5dp" android:paddingTop="10dp"
-  	android:id="@+id/header">
+  	android:orientation="vertical" android:background="@drawable/result_item_bg"
+  	android:layout_marginRight="2dp">
+  <LinearLayout
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:orientation="horizontal" android:background="@drawable/result_item_header_bg"
+  		android:padding="5dp" android:paddingTop="10dp"
+  		android:id="@+id/header">
 
   	<ImageView android:id="@+id/img_collapsed"
-  		android:layout_width="18sp" android:layout_height="18sp"/>
+  			android:layout_width="18sp" android:layout_height="18sp"/>
 
   	<ImageView android:id="@+id/img_title"
-  		android:layout_width="wrap_content" android:layout_height="wrap_content"
-  		android:layout_weight="1" android:gravity="center"
-  		android:maxHeight="10sp"/>
+  			android:layout_width="wrap_content" android:layout_height="wrap_content"
+  			android:layout_weight="1" android:gravity="center"
+  			android:maxHeight="10sp"/>
 
   	<ProgressBar android:id="@+id/progress_loading"
-  		android:layout_width="18sp" android:layout_height="18sp"
-  		android:visibility="invisible"
-  		android:indeterminateOnly="true"
+  			android:layout_width="18sp" android:layout_height="18sp"
+  			android:visibility="invisible"
+  			android:indeterminateOnly="true"
             android:indeterminateDrawable="@drawable/progress_spin"
             android:indeterminateBehavior="repeat"
             android:indeterminateDuration="3500"/>
   </LinearLayout>
   <LinearLayout android:id="@+id/body"
-    android:layout_width="fill_parent" android:layout_height="wrap_content"
-  	android:orientation="vertical"
-	android:paddingBottom="5dp" android:paddingLeft="5dp"
-  	android:paddingRight="5dp"
-  	android:visibility="gone"/>
+    	android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:orientation="vertical"
+		android:paddingBottom="5dp" android:paddingLeft="5dp"
+  		android:paddingRight="5dp">
+	<WebView android:id="@+id/webview"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+  </LinearLayout>
 </LinearLayout>

@@ -7,8 +7,10 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,6 +32,7 @@ import com.alquimista.android.asktheoracle.HttpProgressListener;
 import com.alquimista.android.asktheoracle.R;
 import com.alquimista.android.asktheoracle.datasource.DataFactory;
 import com.alquimista.android.asktheoracle.datasource.SearchRecentProvider;
+import com.alquimista.android.asktheoracle.preference.SettingPreference;
 
 public class MainActivity extends Activity {
 	public final static String TAG ="AskTheOracle.MainActivity";
@@ -189,19 +192,30 @@ public class MainActivity extends Activity {
     }
 
     private void handleIntent(Intent intent) {
+    	String query = "";
     	if ( Intent.ACTION_SEARCH.equals( intent.getAction() ) )
         {
-    		showInstructionView(false);
-    		cancelWorker();
-    		mWorker = new SuggestListWorker();
-    		mWorker.execute(intent.getStringExtra( SearchManager.QUERY ));
+    		query = intent.getStringExtra( SearchManager.QUERY );
+
+    		//TODO: exception
+    		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+    		if ( sharedPref.getBoolean( SettingPreference.WIKTIONARY_ENABLE, SettingPreference.DEFAULT_VALUE_ENABLE_SOURCE)
+    				|| sharedPref.getBoolean( SettingPreference.WIKIPEDIA_ENABLE, SettingPreference.DEFAULT_VALUE_ENABLE_SOURCE) )
+    		{
+    			showInstructionView(false);
+    			cancelWorker();
+    			mWorker = new SuggestListWorker();
+    			mWorker.execute(query);
+    		}
+    		else
+    		{
+    			showResultActivity(query);
+    		}
         }
         else if( Intent.ACTION_VIEW.equals( intent.getAction() ) )
         {
-        	String query = intent.getDataString();
-
-        	if ( DEBUG ) Log.d(TAG, "Intent.ACTION_VIEW, query:"+query );
-
+        	query = intent.getDataString();
         	showResultActivity(query);
         }
     }

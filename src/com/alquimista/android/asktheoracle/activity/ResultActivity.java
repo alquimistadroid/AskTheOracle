@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alquimista.android.asktheoracle.GoogleTranslateHelper;
 import com.alquimista.android.asktheoracle.HttpProgressListener;
 import com.alquimista.android.asktheoracle.R;
 import com.alquimista.android.asktheoracle.datasource.DataFactory;
@@ -114,9 +115,11 @@ public class ResultActivity extends Activity {
 	{
 
 		ResultItemView pointer = null;
+		String style = "";
 		switch (requestCode) {
 		case HttpProgressListener.REQUEST_CODE_GT:
 			pointer = mGoogleTranslate;
+			style = GoogleTranslateHelper.getDefaultStyle();
 			break;
 		case HttpProgressListener.REQUEST_CODE_WIKTIONARY:
 			pointer = mWiktionary;
@@ -130,9 +133,7 @@ public class ResultActivity extends Activity {
 		{
 			if ( ! TextUtils.isEmpty( result ) )
 			{
-				TextView tv = new TextView(this);
-				tv.setText(result);
-				pointer.setContent(tv);
+				pointer.setContent(result, style);
 			}
 			pointer.showLoading(false);
 		}
